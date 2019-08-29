@@ -110,6 +110,7 @@ class HarMongoDump(object):
                 "text": flow.request.get_text(strict=False),
                 "params": params
             }
+            entry["text"]=flow.request.get_text(strict=False)
 
         if flow.client_conn.clientcert:
             entry["clientCert"] = {
@@ -146,9 +147,11 @@ class HarMongoDump(object):
 
         if strutils.is_mostly_bin(flow.response.content):
             entry["content"]["text"] = base64.b64encode(flow.response.content).decode()  # Store binary data as base64
+            entry["text"] = base64.b64encode(flow.response.content).decode()  # Store binary data as base64
             entry["content"]["encoding"] = "base64"
         else:
             entry["content"]["text"] = flow.response.get_text(strict=False)
+            entry["text"] = flow.response.get_text(strict=False)
 
 
         if flow.server_conn.connected():
